@@ -1,14 +1,11 @@
 package sfs.service;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import sfs.exception.ResourceNotFoundException;
 import sfs.model.Admin;
 import sfs.model.Client;
 import sfs.model.FacilityManager;
 import sfs.model.User;
-import sfs.repository.MongoRentalRepository;
-import sfs.repository.MongoUserRepository;
+import org.springframework.stereotype.Service;
 import sfs.repository.UserRepository;
 import sfs.rest.dto.CreateAdminRequest;
 import sfs.rest.dto.CreateClientRequest;
@@ -18,13 +15,12 @@ import sfs.rest.dto.UpdateUserRequest;
 import java.util.List;
 import java.util.UUID;
 
-@ApplicationScoped
+@Service
 public class UserServiceImpl implements UserService{
 
-    private final MongoUserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Inject
-    public UserServiceImpl(MongoUserRepository userRepository){
+    public UserServiceImpl(UserRepository userRepository){
         this.userRepository = userRepository;
     }
 
@@ -79,14 +75,14 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<User> getAllUsers() {
-        return userRepository.findAllUsers();
+        return userRepository.findAll();
     }
 
     @Override
     public User activateUser(String id) throws Exception {
         User user = getUserById(id);
         if(user.isActive()){
-            throw new Exception("Użytkownik o ID: " + user.getHexId() + " już został aktywowany.");
+            throw new Exception("Użytkownik o ID: " + user.getId() + " już został aktywowany.");
         }
         user.setActive(true);
         return userRepository.save(user);
@@ -96,7 +92,7 @@ public class UserServiceImpl implements UserService{
     public User deactivateUser(String id) throws Exception {
         User user = getUserById(id);
         if(!user.isActive()){
-            throw new Exception("Użytkownik o ID: " + user.getHexId() + " już był nieaktywny.");
+            throw new Exception("Użytkownik o ID: " + user.getId() + " już był nieaktywny.");
         }
         user.setActive(false);
         return userRepository.save(user);

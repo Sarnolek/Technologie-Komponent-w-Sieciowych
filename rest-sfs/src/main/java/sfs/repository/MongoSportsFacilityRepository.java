@@ -1,35 +1,41 @@
 package sfs.repository;
-import io.quarkus.mongodb.panache.PanacheMongoRepository;
-import jakarta.enterprise.context.ApplicationScoped;
-import org.bson.types.ObjectId;
+
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Repository;
 import sfs.model.SportsFacility;
 
 import java.util.List;
 import java.util.Optional;
 
-@ApplicationScoped
-public class MongoSportsFacilityRepository implements PanacheMongoRepository<SportsFacility> {
+@Repository
+public class MongoSportsFacilityRepository implements SportsFacilityRepository{
 
-    public SportsFacility save(SportsFacility facility) {
-        persistOrUpdate(facility);
-        return facility;
+    private final MongoTemplate mongoTemplate;
+
+    public MongoSportsFacilityRepository(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
     }
 
+    @Override
+    public SportsFacility save(SportsFacility sportsFacility) {
+        return mongoTemplate.save(sportsFacility, "facilities");
+    }
+
+    @Override
     public Optional<SportsFacility> findById(String id) {
-        try {
-            return find("_id", new ObjectId(id)).firstResultOptional();
-        } catch (IllegalArgumentException e) {
-            return Optional.empty();
-        }
+        return Optional.ofNullable(mongoTemplate.findById(id, SportsFacility.class, "facilities"));
     }
 
-    public List<SportsFacility> findAllFacilities() {
-        return listAll();
+    @Override
+    public List<SportsFacility> findAll() {
+        return mongoTemplate.findAll(SportsFacility.class, "facilities");
     }
 
+    @Override
     public void deleteById(String id) {
-        try {
-            delete("_id", new ObjectId(id));
-        } catch (IllegalArgumentException e) {}
+        Query query = new Query(Criteria.where("_id").is(id));
+        mongoTemplate.remove(query, SportsFacility.class, "facilities");
     }
 }

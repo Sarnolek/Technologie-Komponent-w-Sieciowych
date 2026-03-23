@@ -1,36 +1,39 @@
 package sfs;
 
-import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.IndexOptions;
-import com.mongodb.client.model.Indexes;
-
-import static io.restassured.RestAssured.given;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.index.Index;
+import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsEqual.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@QuarkusTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class RestSfsApplicationTests {
 
-    @Inject
-    MongoClient mongoClient;
+    @LocalServerPort
+    private int port;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     @BeforeEach
     void setUp() {
+        RestAssured.port = port;
 
-        MongoDatabase db = mongoClient.getDatabase("sportsfacility");
+        mongoTemplate.dropCollection("users");
+        mongoTemplate.dropCollection("facilities");
+        mongoTemplate.dropCollection("rentals");
 
-        try { db.getCollection("users").drop(); } catch (Exception e) {}
-        try { db.getCollection("facilities").drop(); } catch (Exception e) {}
-        try { db.getCollection("rentals").drop(); } catch (Exception e) {}
-
-        db.getCollection("users").createIndex(Indexes.ascending("login"), new IndexOptions().unique(true));
+        Index uniqueLoginIndex = new Index().on("login", Sort.Direction.ASC).unique();
+        mongoTemplate.indexOps("users").createIndex(uniqueLoginIndex);
     }
 
     @Test
@@ -245,7 +248,7 @@ class RestSfsApplicationTests {
                 .when()
                 .delete("/api/v1/facilities/{id}", id)
                 .then()
-                .statusCode(204);
+                .statusCode(200);
 
         given()
                 .when()
@@ -447,7 +450,7 @@ class RestSfsApplicationTests {
 
         given().when().put("/api/v1/users/{id}/activate", clientId).then().statusCode(200);
 
-        String nonExistentFacilityId = "507f1f77bcf86cd799439011";
+        String nonExistentFacilityId = "ffffffff-ffff-ffff-ffff-ffffffffffff";
 
         String rentalJson = String.format("""
         {

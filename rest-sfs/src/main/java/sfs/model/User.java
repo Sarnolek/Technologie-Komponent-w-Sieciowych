@@ -1,18 +1,14 @@
 package sfs.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.quarkus.mongodb.panache.common.MongoEntity;
-import org.bson.codecs.pojo.annotations.BsonDiscriminator;
-import org.bson.codecs.pojo.annotations.BsonId;
-import org.bson.codecs.pojo.annotations.BsonIgnore;
-import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.UUID;
 
-@MongoEntity(collection = "users")
-@BsonDiscriminator
+@Document(collection = "users")
 public abstract class User {
-    @BsonId
-    private ObjectId id;
+    @Id
+    private String id;
     private String firstName;
     private String lastName;
     boolean isActive;
@@ -28,23 +24,19 @@ public abstract class User {
     public User() {
     }
 
-
-    public ObjectId getId() { return id; }
-    public void setId(ObjectId id) { this.id = id; }
-
-    @JsonProperty("id")
-    @BsonIgnore
-    public String getHexId() {
-        return id != null ? id.toHexString() : null;
+    public String getId() {
+        return id;
     }
 
-    @JsonProperty("id")
-    @BsonIgnore
-    public void setHexId(String id) {
-        if (id != null && !id.isEmpty()) {
-            this.id = new ObjectId(id);
-        }
+    public void setId(String id) {
+        this.id = id;
     }
+
+    //    public UUID getId() { return id; }
+//
+//    public void setId(UUID id) {
+//        this.id = id;
+//    }
 
     public String getFirstName() {
         return firstName;
@@ -87,6 +79,11 @@ public abstract class User {
                 ", lastName='" + lastName + '\'' +
                 ", isActive='" + isActive + '\'' +
                 '}';
+    }
+
+    public String getRole() {
+        return this.getClass().getSimpleName().toUpperCase();
+        // Zwróci np. "CLIENT", "ADMIN", "FACILITYMANAGER"
     }
 
 }

@@ -1,19 +1,15 @@
 package sfs.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.quarkus.mongodb.panache.common.MongoEntity;
-import org.bson.codecs.pojo.annotations.BsonDiscriminator;
-import org.bson.codecs.pojo.annotations.BsonId;
-import org.bson.codecs.pojo.annotations.BsonIgnore;
-import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
-
-@MongoEntity(collection = "rentals")
+@Document(collection = "rentals")
 public class Rental {
-    @BsonId
-    private ObjectId id;
+    @Id
+    private String id;
     private String clientId;
     private String facilityId;
     private LocalDateTime startTime;
@@ -26,28 +22,12 @@ public class Rental {
         this.endTime = endTime;
     }
 
-    public Rental() {}
-
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(ObjectId id) {
+    public void setId(String id) {
         this.id = id;
-    }
-
-    @JsonProperty("id")
-    @BsonIgnore
-    public String getHexId() {
-        return id != null ? id.toHexString() : null;
-    }
-
-    @JsonProperty("id")
-    @BsonIgnore
-    public void setHexId(String id) {
-        if (id != null && !id.isEmpty()) {
-            this.id = new ObjectId(id);
-        }
     }
 
     public String getClientId() {
@@ -65,6 +45,30 @@ public class Rental {
     public void setFacilityId(String facilityId) {
         this.facilityId = facilityId;
     }
+
+    //    public UUID getId() {
+//        return id;
+//    }
+//
+//    public void setId(UUID id) {
+//        this.id = id;
+//    }
+//
+//    public UUID getClientId() {
+//        return clientId;
+//    }
+//
+//    public void setClientId(UUID clientId) {
+//        this.clientId = clientId;
+//    }
+//
+//    public UUID getFacilityId() {
+//        return facilityId;
+//    }
+//
+//    public void setFacilityId(UUID facilityId) {
+//        this.facilityId = facilityId;
+//    }
 
     public LocalDateTime getStartTime() {
         return startTime;

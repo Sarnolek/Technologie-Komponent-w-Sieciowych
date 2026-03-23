@@ -2,8 +2,6 @@ services:
   mongo_1:
     build:
       context: .
-#      ../../rest-sfs
-
     image: mongocustom-sportsfacility
     container_name: mongodb1
     hostname: mongodb1

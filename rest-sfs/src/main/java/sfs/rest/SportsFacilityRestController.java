@@ -1,15 +1,9 @@
 package sfs.rest;
 
-
-import jakarta.inject.Inject;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
 import sfs.model.Gym;
 import sfs.model.SportsFacility;
+import org.springframework.web.bind.annotation.*;
 import sfs.model.SwimmingPool;
 import sfs.model.TennisCourt;
 import sfs.rest.dto.*;
@@ -18,68 +12,63 @@ import sfs.service.SportsFacilityService;
 import java.util.List;
 import java.util.UUID;
 
-@Path("/api/v1/facilities")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
+@RestController
+@RequestMapping("api/v1/facilities")
 public class SportsFacilityRestController {
 
-    @Inject
-    SportsFacilityService sportsFacilityService;
+    private final SportsFacilityService sportsFacilityService;
 
     public SportsFacilityRestController(SportsFacilityService sportsFacilityService) {
         this.sportsFacilityService = sportsFacilityService;
     }
 
-    @GET
-    @Path("/{facilityId}")
-    public SportsFacility getFacilityById(@PathParam("facilityId") String facilityId) throws Exception {
+    @GetMapping("/{facilityId}")
+    public SportsFacility getFacilityById(@PathVariable String facilityId) throws Exception {
         return sportsFacilityService.getFacilityById(facilityId);
     }
 
-    @GET
+    @GetMapping()
     public List<SportsFacility> getAllFacilities() {
         return sportsFacilityService.getAllFacilities();
     }
 
-    @POST
-    @Path("/tennis-courts")
-    public SportsFacility createTennisCourt(@Valid CreateTennisCourtRequest request) throws Exception {
+    @PostMapping("/tennis-courts")
+    public SportsFacility createTennisCourt(@Valid @RequestBody CreateTennisCourtRequest request) throws Exception {
         return sportsFacilityService.createTennisCourt(request);
     }
 
-    @POST
-    @Path("/gyms")
-    public SportsFacility createGym(@Valid CreateGymRequest request) throws Exception {
+    @PostMapping("/gyms")
+    public SportsFacility createGym(@Valid @RequestBody CreateGymRequest request) throws Exception {
         return  sportsFacilityService.createGym(request);
     }
 
-    @POST
-    @Path("/swimming-pools")
-    public SportsFacility createSwimmingPool(@Valid CreateSwimmingPoolRequest request) throws Exception {
+    @PostMapping("/swimming-pools")
+    public SportsFacility createSwimmingPool(@Valid @RequestBody CreateSwimmingPoolRequest request) throws Exception {
         return  sportsFacilityService.createSwimmingPool(request);
     }
 
-    @PUT
-    @Path("/gyms/{id}")
-    public Gym updateGym(@PathParam("id") String id, @Valid UpdateGymRequest request) throws Exception {
+    @PutMapping("/gyms/{id}")
+    public Gym updateGym(@PathVariable String id, @Valid @RequestBody UpdateGymRequest request) throws Exception {
         return sportsFacilityService.updateGym(id, request);
     }
 
-    @PUT
-    @Path("/tennis-courts/{id}")
-    public TennisCourt updateTennisCourt(@PathParam("id") String id, @Valid UpdateTennisCourtRequest request) throws Exception {
+    @PutMapping("/tennis-courts/{id}")
+    public TennisCourt updateTennisCourt(@PathVariable String id, @Valid @RequestBody UpdateTennisCourtRequest request) throws Exception {
         return sportsFacilityService.updateTennisCourt(id, request);
     }
 
-    @PUT
-    @Path("/swimming-pools/{id}")
-    public SwimmingPool updateSwimmingPool(@PathParam("id") String id, @Valid UpdateSwimmingPoolRequest request) throws Exception {
+    @PutMapping("/swimming-pools/{id}")
+    public SwimmingPool updateSwimmingPool(@PathVariable String id, @Valid @RequestBody UpdateSwimmingPoolRequest request) throws Exception {
         return sportsFacilityService.updateSwimmingPool(id, request);
     }
 
-    @DELETE
-    @Path("/{facilityId}")
-    public void deleteFacility(@PathParam("facilityId") String facilityId) throws Exception {
+//    @PutMapping("/{facilityId}")
+//    public SportsFacility updateFacility(@PathVariable String facilityId, @Valid @RequestBody UpdateFacilityRequest request) throws Exception {
+//        return sportsFacilityService.updateFacility(facilityId, request);
+//    }
+
+    @DeleteMapping("/{facilityId}")
+    public void deleteFacility(@PathVariable String facilityId) throws Exception {
         sportsFacilityService.deleteFacility(facilityId);
     }
 

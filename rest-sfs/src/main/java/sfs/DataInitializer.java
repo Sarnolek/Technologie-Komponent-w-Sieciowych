@@ -1,16 +1,14 @@
 package sfs;
 
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.CreateCollectionOptions;
-import com.mongodb.client.model.IndexOptions;
-import com.mongodb.client.model.Indexes;
-import com.mongodb.client.model.ValidationOptions;
-import io.quarkus.runtime.StartupEvent;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.event.Observes;
-import jakarta.inject.Inject;
-import org.bson.Document;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.CollectionOptions;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.index.Index;
+import org.springframework.data.mongodb.core.schema.JsonSchemaProperty;
+import org.springframework.data.mongodb.core.schema.MongoJsonSchema;
+import org.springframework.stereotype.Component;
 import sfs.model.SportsFacility;
 import sfs.model.User;
 import sfs.rest.dto.*;
@@ -19,82 +17,67 @@ import sfs.service.SportsFacilityService;
 import sfs.service.UserService;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
-@ApplicationScoped
-public class DataInitializer {
+@Profile("!test")
+@Component
+public class DataInitializer implements CommandLineRunner {
 
-    @Inject UserService userService;
-    @Inject SportsFacilityService sportsFacilityService;
-    @Inject RentalService rentalService;
-    @Inject MongoClient mongoClient;
+    private final UserService userService;
+    private final SportsFacilityService sportsFacilityService;
+    private final RentalService rentalService;
+    private final MongoTemplate mongoTemplate;
 
-    void onStart(@Observes StartupEvent ev) {
-        try {
-            initData();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public DataInitializer(UserService userService,
+                           SportsFacilityService sportsFacilityService,
+                           RentalService rentalService,
+                           MongoTemplate mongoTemplate) {
+        this.userService = userService;
+        this.sportsFacilityService = sportsFacilityService;
+        this.rentalService = rentalService;
+        this.mongoTemplate = mongoTemplate;
     }
 
-    public void initData() throws Exception {
-        MongoDatabase db = mongoClient.getDatabase("sportsfacility");
+    @Override
+    public void run(String... args) throws Exception {
 
-        try { db.getCollection("users").drop(); } catch (Exception e) {}
-        try { db.getCollection("facilities").drop(); } catch (Exception e) {}
-        try { db.getCollection("rentals").drop(); } catch (Exception e) {}
+        mongoTemplate.dropCollection("users");
+        mongoTemplate.dropCollection("facilities");
+        mongoTemplate.dropCollection("rentals");
 
-        Document userJsonSchema = new Document("bsonType", "object")
-                .append("required", Arrays.asList("login", "firstName", "lastName"))
-                .append("properties", new Document()
-                        .append("login", new Document()
-                                .append("bsonType", "string")
-                                .append("minLength", 4)
-                                .append("maxLength", 20))
-                        .append("firstName", new Document()
-                                .append("bsonType", "string")
-                                .append("minLength", 3)
-                                .append("maxLength", 20))
-                        .append("lastName", new Document()
-                                .append("bsonType", "string")
-                                .append("minLength", 4)
-                                .append("maxLength", 20))
-                );
+        MongoJsonSchema userSchema = MongoJsonSchema.builder()
+                .required("login", "firstName", "lastName")
+                .properties(
+                        JsonSchemaProperty.string("login").minLength(4).maxLength(20),
+                        JsonSchemaProperty.string("firstName").minLength(3).maxLength(20),
+                        JsonSchemaProperty.string("lastName").minLength(4).maxLength(20)
+                )
+                .build();
+        mongoTemplate.createCollection("users", CollectionOptions.empty().schema(userSchema));
 
-        ValidationOptions userValidation = new ValidationOptions().validator(new Document("$jsonSchema", userJsonSchema));
-        db.createCollection("users", new CreateCollectionOptions().validationOptions(userValidation));
+        mongoTemplate.indexOps("users").createIndex(
+                new Index().on("login", Sort.Direction.ASC).unique()
+        );
 
-        db.getCollection("users").createIndex(Indexes.ascending("login"), new IndexOptions().unique(true));
+        MongoJsonSchema facilitySchema = MongoJsonSchema.builder()
+                .required("name", "pricePerHour", "capacity")
+                .properties(
+                        JsonSchemaProperty.string("name").minLength(3).maxLength(20),
+                        JsonSchemaProperty.float64("pricePerHour").gte(0.0),
+                        JsonSchemaProperty.int32("capacity").gte(1)
+                )
+                .build();
+        mongoTemplate.createCollection("facilities", CollectionOptions.empty().schema(facilitySchema));
 
-
-        Document facilityJsonSchema = new Document("bsonType", "object")
-                .append("required", Arrays.asList("name", "pricePerHour", "capacity"))
-                .append("properties", new Document()
-                        .append("name", new Document()
-                                .append("bsonType", "string")
-                                .append("minLength", 3)
-                                .append("maxLength", 20))
-                        .append("pricePerHour", new Document()
-                                .append("bsonType", "double")
-                                .append("minimum", 0.0))
-                        .append("capacity", new Document()
-                                .append("bsonType", "int")
-                                .append("minimum", 1))
-                );
-        ValidationOptions facilityValidation = new ValidationOptions().validator(new Document("$jsonSchema", facilityJsonSchema));
-        db.createCollection("facilities", new CreateCollectionOptions().validationOptions(facilityValidation));
-
-
-        Document rentalJsonSchema = new Document("bsonType", "object")
-                .append("required", Arrays.asList("clientId", "facilityId", "startTime", "endTime"))
-                .append("properties", new Document()
-                        .append("clientId", new Document().append("bsonType", "string").append("minLength", 1))
-                        .append("facilityId", new Document().append("bsonType", "string").append("minLength", 1))
-                        .append("startTime", new Document().append("bsonType", "date"))
-                        .append("endTime", new Document().append("bsonType", "date"))
-                );
-        ValidationOptions rentalValidation = new ValidationOptions().validator(new Document("$jsonSchema", rentalJsonSchema));
-        db.createCollection("rentals", new CreateCollectionOptions().validationOptions(rentalValidation));
+        MongoJsonSchema rentalSchema = MongoJsonSchema.builder()
+                .required("clientId", "facilityId", "startTime", "endTime")
+                .properties(
+                        JsonSchemaProperty.string("clientId").minLength(1),
+                        JsonSchemaProperty.string("facilityId").minLength(1),
+                        JsonSchemaProperty.date("startTime"),
+                        JsonSchemaProperty.date("endTime")
+                )
+                .build();
+        mongoTemplate.createCollection("rentals", CollectionOptions.empty().schema(rentalSchema));
 
 
         SportsFacility gym1 = sportsFacilityService.createGym(
@@ -143,20 +126,21 @@ public class DataInitializer {
                 new CreateClientRequest("anowak", "Anna", "Nowak")
         );
 
-        userService.activateUser(client1.getHexId());
-        userService.activateUser(client2.getHexId());
+        userService.activateUser(client1.getId());
+        userService.activateUser(client2.getId());
+
 
         try {
             rentalService.rentFacility(
-                    client1.getHexId(),
-                    court1.getHexId(),
+                    client1.getId(),
+                    court1.getId(),
                     LocalDateTime.now().plusDays(2).withHour(10).withMinute(0),
                     LocalDateTime.now().plusDays(2).withHour(11).withMinute(0)
             );
 
             rentalService.rentFacility(
-                    client2.getHexId(),
-                    pool1.getHexId(),
+                    client2.getId(),
+                    pool1.getId(),
                     LocalDateTime.now().plusDays(3).withHour(18).withMinute(0),
                     LocalDateTime.now().plusDays(3).withHour(19).withMinute(0)
             );

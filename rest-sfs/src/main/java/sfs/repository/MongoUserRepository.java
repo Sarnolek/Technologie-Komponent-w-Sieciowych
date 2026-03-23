@@ -1,7 +1,9 @@
 package sfs.repository;
-import io.quarkus.mongodb.panache.PanacheMongoRepository;
-import jakarta.enterprise.context.ApplicationScoped;
-import org.bson.types.ObjectId;
+
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Repository;
 import sfs.model.User;
 
 import java.util.List;
@@ -9,38 +11,46 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-@ApplicationScoped
-public class MongoUserRepository implements PanacheMongoRepository<User> {
+@Repository
+public class MongoUserRepository implements UserRepository{
 
+    private final MongoTemplate mongoTemplate;
+
+    public MongoUserRepository(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
+    }
+
+    @Override
     public User save(User user) {
-        persistOrUpdate(user);
-        return user;
+        // Baza sama generuje id
+        return mongoTemplate.save(user, "users");
     }
 
+    @Override
     public Optional<User> findById(String id) {
-        try {
-            return find("_id", new ObjectId(id)).firstResultOptional();
-        } catch (IllegalArgumentException e) {
-            return Optional.empty();
-        }
+        return Optional.ofNullable(mongoTemplate.findById(id, User.class, "users"));
     }
 
-    public List<User> findAllUsers() {
-        return listAll();
+    @Override
+    public List<User> findAll() {
+        return mongoTemplate.findAll(User.class, "users");
     }
 
+    @Override
     public void deleteById(String id) {
-        try {
-            delete("_id", new ObjectId(id));
-        } catch (IllegalArgumentException e) {
-        }
+        Query query = new Query(Criteria.where("_id").is(id));
+        mongoTemplate.remove(query, User.class, "users");
     }
 
+    @Override
     public Optional<User> findByLogin(String login) {
-        return find("login", login).firstResultOptional();
+        Query query = new Query(Criteria.where("login").is(login));
+        return Optional.ofNullable(mongoTemplate.findOne(query, User.class, "users"));
     }
 
+    @Override
     public List<User> findByLoginFragment(String loginFragment) {
-        return find("login like ?1", loginFragment).list();
+        Query query = new Query(Criteria.where("login").regex(loginFragment, "i"));
+        return mongoTemplate.find(query, User.class, "users");
     }
 }

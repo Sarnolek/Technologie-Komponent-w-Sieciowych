@@ -7,7 +7,9 @@ import sfs.rest.dto.CreateFacilityManagerRequest;
 import sfs.rest.dto.UpdateUserRequest;
 
 import java.util.List;
+import java.util.UUID;
 
+// CRU + activate/deactivate + searching[ByLogin/fragmentOfLogin]
 public interface UserService {
     User createUser(User user) throws Exception;
     User createClient(CreateClientRequest request) throws Exception;

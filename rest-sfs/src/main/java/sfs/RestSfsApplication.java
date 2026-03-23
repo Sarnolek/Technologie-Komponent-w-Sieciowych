@@ -1,11 +1,12 @@
 package sfs;
 
-import io.quarkus.runtime.Quarkus;
-import io.quarkus.runtime.annotations.QuarkusMain;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@QuarkusMain
+@SpringBootApplication
 public class RestSfsApplication {
     public static void main(String[] args) {
-        Quarkus.run(args);
+        SpringApplication.run(RestSfsApplication.class, args);
     }
+
 }

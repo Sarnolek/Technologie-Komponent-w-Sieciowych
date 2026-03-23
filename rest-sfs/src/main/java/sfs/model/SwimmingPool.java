@@ -1,13 +1,8 @@
 package sfs.model;
 
-import io.quarkus.mongodb.panache.common.MongoEntity;
-
-@MongoEntity(collection = "facilities")
 public class SwimmingPool extends SportsFacility{
     private int poolLength;
     private int numberOfLanes;
-
-    public SwimmingPool() {}
 
     public SwimmingPool(String name, double pricePerHour, int capacity, int poolLength, int numberOfLanes) {
         super(name, pricePerHour, capacity);

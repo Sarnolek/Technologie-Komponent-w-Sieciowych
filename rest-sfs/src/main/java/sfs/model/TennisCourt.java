@@ -1,8 +1,5 @@
 package sfs.model;
 
-import io.quarkus.mongodb.panache.common.MongoEntity;
-
-@MongoEntity(collection = "facilities")
 public class TennisCourt extends SportsFacility{
 
     private SurfaceType surfaceType;
@@ -12,8 +9,6 @@ public class TennisCourt extends SportsFacility{
         this.surfaceType = surfaceType;
         this.isIndoor = isIndoor;
     }
-
-    public TennisCourt() {}
 
     public SurfaceType getSurfaceType() {
         return surfaceType;

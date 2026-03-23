@@ -1,12 +1,8 @@
 package sfs.service;
 
-import io.quarkus.security.IdentityAttribute;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
+import org.springframework.stereotype.Service;
 import sfs.exception.ResourceNotFoundException;
 import sfs.model.*;
-import sfs.repository.MongoRentalRepository;
-import sfs.repository.MongoSportsFacilityRepository;
 import sfs.repository.RentalRepository;
 import sfs.repository.SportsFacilityRepository;
 import sfs.rest.dto.*;
@@ -14,15 +10,13 @@ import sfs.rest.dto.*;
 import java.util.List;
 import java.util.UUID;
 
-
-@ApplicationScoped
+@Service
 public class SportsFacilityServiceImpl implements SportsFacilityService{
 
-    private final MongoSportsFacilityRepository sportsFacilityRepository;
-    private final MongoRentalRepository rentalRepository;
+    private final SportsFacilityRepository sportsFacilityRepository;
+    private final RentalRepository rentalRepository;
 
-    @Inject
-    public SportsFacilityServiceImpl(MongoSportsFacilityRepository sportsFacilityRepository, MongoRentalRepository rentalRepository){
+    public SportsFacilityServiceImpl(SportsFacilityRepository sportsFacilityRepository, RentalRepository rentalRepository){
         this.sportsFacilityRepository = sportsFacilityRepository;
         this.rentalRepository = rentalRepository;
     }
@@ -128,6 +122,15 @@ public class SportsFacilityServiceImpl implements SportsFacilityService{
         return (SwimmingPool) sportsFacilityRepository.save(pool);
     }
 
+//    @Override
+//    public SportsFacility updateFacility(String facilityId, UpdateFacilityRequest request) throws Exception {
+//        SportsFacility sportsFacility = getFacilityById(facilityId);
+//        sportsFacility.setName(request.getName());
+//        sportsFacility.setPricePerHour(request.getPricePerHour());
+//        sportsFacility.setCapacity(request.getCapacity());
+//        return sportsFacilityRepository.save(sportsFacility);
+//    }
+
     @Override
     public SportsFacility getFacilityById(String facilityId) {
         return sportsFacilityRepository.findById(facilityId).orElseThrow(() -> new ResourceNotFoundException("Nie udało się znaleźć obiektu o ID: " + facilityId + "."));
@@ -135,7 +138,7 @@ public class SportsFacilityServiceImpl implements SportsFacilityService{
 
     @Override
     public List<SportsFacility> getAllFacilities() {
-        return sportsFacilityRepository.findAllFacilities();
+        return sportsFacilityRepository.findAll();
     }
 
     @Override
