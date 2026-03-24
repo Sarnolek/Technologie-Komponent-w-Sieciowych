@@ -49,7 +49,6 @@ public class SportsFacilityMapper {
             throw new IllegalArgumentException("Nieznany obiekt sportowy: " + facility.getClass());
         }
 
-        // Ustawiamy ID wspólne dla wszystkich obiektów sportowych
         ent.setId(facility.getId());
         return ent;
     }
@@ -60,7 +59,6 @@ public class SportsFacilityMapper {
         SportsFacility facility;
 
         if (ent instanceof TennisCourtEnt courtEnt) {
-            // Tłumaczymy typ nawierzchni (Enum bazodanowy z powrotem na Enum domenowy)
             SurfaceType surfaceType = courtEnt.getSurfaceType() != null ?
                     SurfaceType.valueOf(courtEnt.getSurfaceType().name()) : null;
 
@@ -91,7 +89,6 @@ public class SportsFacilityMapper {
             throw new IllegalArgumentException("Nieznana encja obiektu sportowego: " + ent.getClass());
         }
 
-        // Ustawiamy ID wspólne dla wszystkich obiektów sportowych
         facility.setId(ent.getId());
         return facility;
     }
