@@ -44,6 +44,11 @@
             <artifactId>testcontainers-mongodb</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>pas06</groupId>
+            <artifactId>SoapAdapters</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

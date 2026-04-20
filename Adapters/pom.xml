@@ -15,5 +15,7 @@
 
     <modules>
         <module>RepositoriesAdapters</module>
-        <module>RestAdapters</module> </modules>
+        <module>RestAdapters</module>
+        <module>SoapAdapters</module>
+    </modules>
 </project>
