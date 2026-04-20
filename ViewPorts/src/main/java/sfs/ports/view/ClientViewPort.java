@@ -1,0 +1,9 @@
+package sfs.ports.view;
+
+import sfs.domain.model.User;
+import sfs.ports.view.dto.CreateAdminRequest;
+import sfs.ports.view.dto.CreateClientRequest;
+
+public interface ClientViewPort {
+    User createClient(CreateClientRequest request) throws Exception;
+}

@@ -1,9 +1,9 @@
-package sfs.adapter.rest.dto;
+package sfs.ports.view.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public class CreateFacilityManagerRequest {
+public class CreateAdminRequest {
     @NotBlank
     @Size(min = 4, max = 20)
     private String login;
@@ -16,10 +16,10 @@ public class CreateFacilityManagerRequest {
     @Size(min = 4, max = 20)
     private String lastName;
 
-    public CreateFacilityManagerRequest() {
+    public CreateAdminRequest() {
     }
 
-    public CreateFacilityManagerRequest(String login, String firstName, String lastName) {
+    public CreateAdminRequest(String login, String firstName, String lastName) {
         this.login = login;
         this.firstName = firstName;
         this.lastName = lastName;

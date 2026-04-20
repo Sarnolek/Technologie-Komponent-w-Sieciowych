@@ -1,12 +1,11 @@
-package sfs.adapter.rest.dto;
+package sfs.ports.view.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
-public class CreateTennisCourtRequest {
-
+public class UpdateFacilityRequest {
     @NotBlank
     @Size(min = 3, max = 20)
     private String name;
@@ -19,22 +18,13 @@ public class CreateTennisCourtRequest {
     @Positive
     private int capacity;
 
-    @NotBlank
-    @Size(min = 4, max = 5)
-    private String surfaceType;
-
-    @NotNull
-    private Boolean isIndoor;
-
-    public CreateTennisCourtRequest() {
+    public UpdateFacilityRequest() {
     }
 
-    public CreateTennisCourtRequest(String name, double pricePerHour, int capacity, String surfaceType, Boolean isIndoor) {
+    public UpdateFacilityRequest(String name, double pricePerHour, int capacity) {
         this.name = name;
         this.pricePerHour = pricePerHour;
         this.capacity = capacity;
-        this.surfaceType = surfaceType;
-        this.isIndoor = isIndoor;
     }
 
     public String getName() {
@@ -59,21 +49,5 @@ public class CreateTennisCourtRequest {
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
-    }
-
-    public String getSurfaceType() {
-        return surfaceType;
-    }
-
-    public void setSurfaceType(String surfaceType) {
-        this.surfaceType = surfaceType;
-    }
-
-    public Boolean getIsIndoor() {
-        return isIndoor;
-    }
-
-    public void setIsIndoor(Boolean isIndoor) {
-        this.isIndoor = isIndoor;
     }
 }

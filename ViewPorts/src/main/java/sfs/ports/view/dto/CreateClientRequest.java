@@ -1,23 +1,36 @@
-package sfs.adapter.rest.dto;
+package sfs.ports.view.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public class UpdateUserRequest {
+public class CreateClientRequest {
+    @NotBlank
+    @Size(min = 4, max = 20)
+    private String login;
+
     @NotBlank
     @Size(min = 3, max = 20)
     private String firstName;
 
     @NotBlank
-    @Size(min = 3, max = 20)
+    @Size(min = 4, max = 20)
     private String lastName;
 
-    public UpdateUserRequest() {
+    public CreateClientRequest() {
     }
 
-    public UpdateUserRequest(String firstName, String lastName) {
+    public CreateClientRequest(String login, String firstName, String lastName) {
+        this.login = login;
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getFirstName() {

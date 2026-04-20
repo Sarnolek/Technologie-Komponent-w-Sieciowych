@@ -5,12 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import sfs.domain.model.FacilityManager;
 import sfs.domain.model.User;
-import sfs.adapter.rest.dto.CreateFacilityManagerRequest;
 import sfs.ports.api.UserService;
+import sfs.ports.view.FacilityManagerViewPort;
+import sfs.ports.view.dto.CreateFacilityManagerRequest;
+
 
 @RestController
 @RequestMapping("/api/v1/facility-managers")
-public class FacilityManagerRestController {
+public class FacilityManagerRestController implements FacilityManagerViewPort {
 
     private final UserService userService;
 
@@ -18,6 +20,7 @@ public class FacilityManagerRestController {
         this.userService = userService;
     }
 
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User createFacilityManager(@Valid @RequestBody CreateFacilityManagerRequest request) throws Exception {

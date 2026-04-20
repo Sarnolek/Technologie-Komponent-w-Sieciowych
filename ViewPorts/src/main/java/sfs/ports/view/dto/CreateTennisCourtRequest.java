@@ -1,11 +1,11 @@
-package sfs.adapter.rest.dto;
+package sfs.ports.view.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
-public class CreateGymRequest {
+public class CreateTennisCourtRequest {
 
     @NotBlank
     @Size(min = 3, max = 20)
@@ -19,22 +19,22 @@ public class CreateGymRequest {
     @Positive
     private int capacity;
 
-    @NotNull
-    @Positive
-    private Integer areaInSqm;
+    @NotBlank
+    @Size(min = 4, max = 5)
+    private String surfaceType;
 
     @NotNull
-    private Boolean hasSauna;
+    private Boolean isIndoor;
 
-    public CreateGymRequest() {
+    public CreateTennisCourtRequest() {
     }
 
-    public CreateGymRequest(String name, double pricePerHour, int capacity, Integer areaInSqm, Boolean hasSauna) {
+    public CreateTennisCourtRequest(String name, double pricePerHour, int capacity, String surfaceType, Boolean isIndoor) {
         this.name = name;
         this.pricePerHour = pricePerHour;
         this.capacity = capacity;
-        this.areaInSqm = areaInSqm;
-        this.hasSauna = hasSauna;
+        this.surfaceType = surfaceType;
+        this.isIndoor = isIndoor;
     }
 
     public String getName() {
@@ -61,19 +61,19 @@ public class CreateGymRequest {
         this.capacity = capacity;
     }
 
-    public Integer getAreaInSqm() {
-        return areaInSqm;
+    public String getSurfaceType() {
+        return surfaceType;
     }
 
-    public void setAreaInSqm(Integer areaInSqm) {
-        this.areaInSqm = areaInSqm;
+    public void setSurfaceType(String surfaceType) {
+        this.surfaceType = surfaceType;
     }
 
-    public Boolean getHasSauna() {
-        return hasSauna;
+    public Boolean getIsIndoor() {
+        return isIndoor;
     }
 
-    public void setHasSauna(Boolean hasSauna) {
-        this.hasSauna = hasSauna;
+    public void setIsIndoor(Boolean isIndoor) {
+        this.isIndoor = isIndoor;
     }
 }

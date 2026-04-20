@@ -1,4 +1,4 @@
-package sfs.adapter.rest.dto;
+package sfs.ports.view.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
-public class UpdateGymRequest {
+public class UpdateTennisCourtRequest {
 
     @NotBlank @Size(min = 3, max = 20)
     private String name;
@@ -17,23 +17,22 @@ public class UpdateGymRequest {
     @NotNull @Positive
     private Integer capacity;
 
-    @NotNull @Positive
-    private Integer areaInSqm;
+    @NotBlank
+    private String surfaceType;
 
     @NotNull
-    @JsonProperty("hasSauna")
-    private Boolean hasSauna;
+    @JsonProperty("isIndoor")
+    private Boolean isIndoor;
 
-    public UpdateGymRequest() {}
+    public UpdateTennisCourtRequest() {}
 
-    public UpdateGymRequest(String name, Double pricePerHour, Integer capacity, Integer areaInSqm, Boolean hasSauna) {
+    public UpdateTennisCourtRequest(String name, Double pricePerHour, Integer capacity, String surfaceType, Boolean isIndoor) {
         this.name = name;
         this.pricePerHour = pricePerHour;
         this.capacity = capacity;
-        this.areaInSqm = areaInSqm;
-        this.hasSauna = hasSauna;
+        this.surfaceType = surfaceType;
+        this.isIndoor = isIndoor;
     }
-
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -41,8 +40,8 @@ public class UpdateGymRequest {
     public void setPricePerHour(Double pricePerHour) { this.pricePerHour = pricePerHour; }
     public Integer getCapacity() { return capacity; }
     public void setCapacity(Integer capacity) { this.capacity = capacity; }
-    public Integer getAreaInSqm() { return areaInSqm; }
-    public void setAreaInSqm(Integer areaInSqm) { this.areaInSqm = areaInSqm; }
-    public Boolean getHasSauna() { return hasSauna; }
-    public void setHasSauna(Boolean hasSauna) { this.hasSauna = hasSauna; }
+    public String getSurfaceType() { return surfaceType; }
+    public void setSurfaceType(String surfaceType) { this.surfaceType = surfaceType; }
+    public Boolean getIsIndoor() { return isIndoor; }
+    public void setIsIndoor(Boolean isIndoor) { this.isIndoor = isIndoor; }
 }
