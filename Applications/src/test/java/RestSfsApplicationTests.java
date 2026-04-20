@@ -8,6 +8,12 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.index.Index;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import sfs.RestSfsApplication;
 
 import static io.restassured.RestAssured.given;
@@ -16,7 +22,21 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(classes = RestSfsApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Testcontainers
+@ActiveProfiles("test")
 class RestSfsApplicationTests {
+
+    //mongo:7.0
+    static final MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:7.0");
+
+    static {
+        mongoDBContainer.start();
+    }
+
+    @DynamicPropertySource
+    static void setProperties(DynamicPropertyRegistry registry){
+        registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
+    }
 
     @LocalServerPort
     private int port;
