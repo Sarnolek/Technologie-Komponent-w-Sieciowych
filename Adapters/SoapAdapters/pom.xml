@@ -29,5 +29,16 @@
             <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
             <version>4.0.4</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-transports-local</artifactId>
+            <version>4.0.4</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>
