@@ -7,24 +7,19 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.5.7</version>
-        <relativePath/> </parent>
+        <relativePath/>
+    </parent>
 
     <groupId>pas06</groupId>
-    <artifactId>rest-sfs</artifactId>
+    <artifactId>rest-sfs-root</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>rest-sfs</name>
-    <description>SFS - Hexagonal Architecture</description>
-    <packaging>pom</packaging> <properties>
-    <java.version>25</java.version>
-</properties>
+    <name>rest-sfs-root</name>
+    <description>SFS - Root Project for Hexagonal Architecture</description>
+    <packaging>pom</packaging>
 
-    <modules>
-        <module>ApplicationCore</module>
-        <module>ApplicationPorts</module>
-        <module>Adapters</module>
-        <module>Applications</module>
-        <module>ViewPorts</module>
-    </modules>
+    <properties>
+        <java.version>25</java.version>
+    </properties>
 
     <dependencyManagement>
         <dependencies>
@@ -34,7 +29,6 @@
                 <version>5.5.6</version>
                 <scope>test</scope>
             </dependency>
-
             <dependency>
                 <groupId>org.testcontainers</groupId>
                 <artifactId>testcontainers-bom</artifactId>
@@ -66,5 +60,4 @@
             </plugins>
         </pluginManagement>
     </build>
-
 </project>
