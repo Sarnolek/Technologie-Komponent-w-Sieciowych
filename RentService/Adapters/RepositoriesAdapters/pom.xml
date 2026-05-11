@@ -6,11 +6,11 @@
 
     <parent>
         <groupId>pas06</groupId>
-        <artifactId>Adapters</artifactId>
+        <artifactId>RentService-Adapters</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>RepositoriesAdapters</artifactId>
+    <artifactId>RentService-RepositoriesAdapters</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -20,12 +20,12 @@
         </dependency>
         <dependency>
             <groupId>pas06</groupId>
-            <artifactId>DomainModel</artifactId>
+            <artifactId>RentService-DomainModel</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>pas06</groupId>
-            <artifactId>ApplicationPorts</artifactId>
+            <artifactId>RentService-ApplicationPorts</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

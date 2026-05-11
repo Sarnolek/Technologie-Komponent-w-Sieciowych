@@ -10,7 +10,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>ViewPorts</artifactId>
+    <artifactId>UserService-ViewPorts</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -24,7 +24,7 @@
         </dependency>
         <dependency>
             <groupId>pas06</groupId>
-            <artifactId>DomainModel</artifactId>
+            <artifactId>UserService-DomainModel</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

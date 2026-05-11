@@ -10,13 +10,13 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>ApplicationPorts</artifactId>
+    <artifactId>UserService-ApplicationPorts</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>pas06</groupId>
-            <artifactId>DomainModel</artifactId>
+            <artifactId>UserService-DomainModel</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

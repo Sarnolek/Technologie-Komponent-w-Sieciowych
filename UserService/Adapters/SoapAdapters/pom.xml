@@ -6,22 +6,22 @@
 
     <parent>
         <groupId>pas06</groupId>
-        <artifactId>Adapters</artifactId>
+        <artifactId>UserService-Adapters</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>SoapAdapters</artifactId>
+    <artifactId>UserService-SoapAdapters</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>pas06</groupId>
-            <artifactId>ViewPorts</artifactId>
+            <artifactId>UserService-ViewPorts</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>pas06</groupId>
-            <artifactId>ApplicationPorts</artifactId>
+            <artifactId>UserService-ApplicationPorts</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

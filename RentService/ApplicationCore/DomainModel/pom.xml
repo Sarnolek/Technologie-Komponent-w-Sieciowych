@@ -6,10 +6,17 @@
 
     <parent>
         <groupId>pas06</groupId>
-        <artifactId>ApplicationCore</artifactId>
+        <artifactId>RentService-ApplicationCore</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>DomainModel</artifactId>
+    <artifactId>RentService-DomainModel</artifactId>
     <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

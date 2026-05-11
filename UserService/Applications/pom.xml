@@ -10,18 +10,18 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>Applications</artifactId>
+    <artifactId>UserService-Applications</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>pas06</groupId>
-            <artifactId>RestAdapters</artifactId>
+            <artifactId>UserService-RestAdapters</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>pas06</groupId>
-            <artifactId>RepositoriesAdapters</artifactId>
+            <artifactId>UserService-RepositoriesAdapters</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

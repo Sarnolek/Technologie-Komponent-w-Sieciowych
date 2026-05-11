@@ -10,7 +10,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>Adapters</artifactId>
+    <artifactId>RentService-Adapters</artifactId>
     <packaging>pom</packaging>
 
     <modules>
