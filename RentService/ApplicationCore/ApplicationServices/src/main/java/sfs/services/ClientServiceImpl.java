@@ -5,6 +5,7 @@ import sfs.domain.exception.ResourceNotFoundException;
 import sfs.domain.model.Client;
 import sfs.ports.api.ClientService;
 import sfs.ports.infrastructure.ClientRepositoryPort;
+import io.micrometer.core.annotation.Timed;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    @Timed(value = "client.creation.time", description = "Czas potrzebny na przetworzenie profilu klienta z RabbitMQ")
     public Client createClient(Client client) {
         return clientRepositoryPort.save(client);
     }

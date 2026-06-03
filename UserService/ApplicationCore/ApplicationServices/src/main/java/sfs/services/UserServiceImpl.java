@@ -3,8 +3,10 @@ package sfs.services;
 import org.springframework.stereotype.Service;
 import sfs.domain.exception.ResourceNotFoundException;
 import sfs.domain.model.User;
+import sfs.ports.api.MessagePublisherPort;
 import sfs.ports.api.UserService;
 import sfs.ports.infrastructure.UserRepositoryPort;
+import io.micrometer.core.annotation.Timed;
 
 import java.util.List;
 
@@ -12,14 +14,19 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepositoryPort userRepositoryPort;
+    private final MessagePublisherPort messagePublisherPort;
 
-    public UserServiceImpl(UserRepositoryPort userRepositoryPort){
+    public UserServiceImpl(UserRepositoryPort userRepositoryPort, MessagePublisherPort messagePublisherPort){
         this.userRepositoryPort = userRepositoryPort;
+        this.messagePublisherPort = messagePublisherPort;
     }
 
     @Override
+    @Timed(value = "user.creation.time", description = "Czas potrzebny na utworzenie użytkownika")
     public User createUser(User user) {
-        return userRepositoryPort.save(user);
+        User savedUser = userRepositoryPort.save(user);
+        messagePublisherPort.publishUserCreatedEvent(savedUser.getId(), savedUser.getFirstName(), savedUser.getLastName());
+        return savedUser;
     }
 
     @Override
