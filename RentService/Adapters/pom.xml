@@ -17,5 +17,6 @@
         <module>RepositoriesAdapters</module>
         <module>RestAdapters</module>
         <module>SoapAdapters</module>
+        <module>MQAdapters</module>
     </modules>
 </project>
